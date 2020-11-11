@@ -33,3 +33,14 @@ example(of: "enumerated and map") {
     .subscribe(onNext: { print($0) })
     .disposed(by: disposeBag)
 }
+
+example(of: "compact map") {
+  let disposeBag = DisposeBag()
+
+  Observable.of("To", "be", nil, "or", "not", "be", nil)
+    .compactMap { $0 }
+    .toArray()
+    .map { $0.joined(separator: " ") }
+    .subscribe(onSuccess: { print($0) })
+    .disposed(by: disposeBag)
+}
