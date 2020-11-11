@@ -21,3 +21,15 @@ example(of: "map") {
     .subscribe(onNext: { print($0) })
     .disposed(by: disposeBag)
 }
+
+example(of: "enumerated and map") {
+  let disposeBag = DisposeBag()
+
+  Observable.of(1, 2, 3, 4, 5, 6)
+    .enumerated()
+    .map { index, integer in
+      index > 2 ? integer * 2 : integer
+    }
+    .subscribe(onNext: { print($0) })
+    .disposed(by: disposeBag)
+}
