@@ -1,6 +1,10 @@
 import Foundation
 import RxSwift
 
+struct Student {
+  let score: BehaviorSubject<Int>
+}
+
 example(of: "toArray") {
   let disposeBag = DisposeBag()
 
@@ -43,4 +47,24 @@ example(of: "compact map") {
     .map { $0.joined(separator: " ") }
     .subscribe(onSuccess: { print($0) })
     .disposed(by: disposeBag)
+}
+
+example(of: "flat map") {
+  let disposeBag = DisposeBag()
+
+  let laura = Student(score: BehaviorSubject(value: 80))
+  let charlotte = Student(score: BehaviorSubject(value: 90))
+
+  let student = PublishSubject<Student>()
+
+  student
+    .flatMap { $0.score }
+    .subscribe(onNext: { print($0) })
+    .disposed(by: disposeBag)
+
+  student.onNext(laura)
+  laura.score.onNext(85)
+  student.onNext(charlotte)
+  laura.score.onNext(95)
+  charlotte.score.onNext(100)
 }
