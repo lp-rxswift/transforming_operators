@@ -1,8 +1,19 @@
 import Foundation
 import RxSwift
 
+//transforming operators
+
 struct Student {
   let score: BehaviorSubject<Int>
+}
+
+example(of: "value of flatMap") {
+  let string = Observable.of("a", "b", "c")
+  string
+    .flatMap { Observable.of("\($0)-x", "\($0)-y", "\($0)-z") }
+    .subscribe(onNext: { element in
+        print(element) // this prints 9 values.
+    })
 }
 
 example(of: "toArray") {
