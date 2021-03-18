@@ -20,18 +20,23 @@ example(of: "verbose print element") {
   let string = Observable.of("a", "b", "c")
   string
     .flatMap { element -> Observable<String> in
-      print(element)
       return Observable.just(element)
     }
+    .subscribe(onNext: { print($0) })
 }
 
-example(of: "verbose print element") {
+example(of: "flat map async") {
+  let subject = PublishSubject<URL>()
   let string = Observable.of("a", "b", "c")
   string
-    .flatMap { element -> Observable<String> in
-      print(element)
-      return Observable.just(element)
+    .flatMap { element -> Observable<URL> in
+      let url = URL(string: "http://myserver.com/api/get_user?id=\(element)")!
+      DispatchQueue.main.async {
+        subject.onNext(url)
+      }
+      return subject.asObserver()
     }
+    .subscribe(onNext: { print($0) })
 }
 
 example(of: "toArray") {
