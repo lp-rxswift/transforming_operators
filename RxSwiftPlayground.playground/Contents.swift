@@ -25,6 +25,15 @@ example(of: "verbose print element") {
     }
 }
 
+example(of: "verbose print element") {
+  let string = Observable.of("a", "b", "c")
+  string
+    .flatMap { element -> Observable<String> in
+      print(element)
+      return Observable.just(element)
+    }
+}
+
 example(of: "toArray") {
   let disposeBag = DisposeBag()
 
